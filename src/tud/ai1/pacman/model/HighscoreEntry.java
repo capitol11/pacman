@@ -50,8 +50,10 @@ public class HighscoreEntry implements Comparable<HighscoreEntry> {
 		// TODO 5.1a
 		// Dummy-Implementierung (bitte ersetzen):
 		// this.date = LocalDateTime.now(); this.name = ""; this.points = 0;
-
-		String[] scoreInfos = data.split(",");
+		// data.replace(";", ",");
+		String tmp = data.replace(";", ",");
+		String[] scoreInfos = tmp.split(",");
+				
 		try {
 			if (scoreInfos.length !=3 )
 				throw new IllegalArgumentException();
@@ -63,7 +65,7 @@ public class HighscoreEntry implements Comparable<HighscoreEntry> {
 			}
 
 		} catch (IllegalArgumentException e) {
-			System.out.println("Invalid data format. Please give the right format for the highscore.");
+			System.out.println("Invalid data format. Please give the right format for the highscore." + e.getCause());
 		}
 
 		

@@ -184,15 +184,19 @@ public class Level {
     	//int rnd_x = rnd.nextInt(map[0].length);
     	//ArrayList<Point> mixedFields = new ArrayList<Point>(); 
     	Point rndPoint = null;
+		rndPoint = new Point(rnd.nextInt(map[0].length),rnd.nextInt(map.length));
 
-    	while(rndPoint==null) {
+    	while(rndPoint!=null) {
     		rndPoint = new Point(rnd.nextInt(map[0].length),rnd.nextInt(map.length));
+
     		if(!isSolid((int)rndPoint.getX(), (int)rndPoint.getY())&&rndPoint!=null)
         		return rndPoint;
-        	
+    		else 
+    			continue;
+    		
     	}
     	
-    	return rndPoint;
+    	return null;
     }
     
 

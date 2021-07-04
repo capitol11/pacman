@@ -25,6 +25,7 @@ import java.util.List;
  * @author Robert Cieslinski
  * @author Kurt Cieslinski
  */
+
 public class LevelParser {
 
     /**
@@ -34,21 +35,41 @@ public class LevelParser {
      * @throws InvalidLevelFormatException falls der eingelesene Level nicht rechteckig ist
      * @throws NoPacmanSpawnPointException falls der eingelesene Level keinen Pac-Spawner enthaelt
      */
+
+	static String levelName = "";
+	
     public static Level fromFile(String file) throws IllegalArgumentException,InvalidLevelCharacterException, InvalidLevelFormatException, NoPacmanSpawnPointException {
         //TODO Aufgabe 4.2a
     	
     	Level level = null;
+    	String mapStr = "";
+
+    	levelName = getLevelName(file);
+    	 
     	try {
-    		String pfad = file;
-        	level = fromString(getLevelName(pfad));	
-        	//System.out.println(level.getName());
-		} catch (IllegalArgumentException e) {
-			System.out.println("Filnename is not empty or null."); 
-		} catch (Exception e) {
-			System.out.println(e.getMessage()); 
+			File fileName = new File(file);
+			FileReader filereader = new FileReader(fileName);
+
+			int singleCh = 0;
+			
+			while ((singleCh = filereader.read()) != -1) {
+				if((char)singleCh==10) {
+					mapStr+="\n";
+				}
+				else
+					mapStr+=(char)singleCh;
+				
+			}
+        	level = fromString(mapStr);	
+	    	level.setName(getLevelName(file));
+
+			filereader.close();
+		} catch (FileNotFoundException e) {
+			// TODO: handle exception
+		} catch (IOException e) {
+			System.out.println(e);
 		}
-    	 
-    	 
+		System.out.println(mapStr);
     	return level;
     }
 
@@ -59,93 +80,70 @@ public class LevelParser {
      * @throws InvalidLevelFormatException falls der eingelesene Level nicht rechteckig ist
      * @throws NoPacmanSpawnPointException falls der eingelesene Level keinen Pac-Spawner enthaelt
      */
-    public static Level fromString(String content) throws IllegalArgumentException,InvalidLevelCharacterException, InvalidLevelFormatException, NoPacmanSpawnPointException {
+    public static Level fromString(String mapStr) throws IllegalArgumentException,InvalidLevelCharacterException, InvalidLevelFormatException, NoPacmanSpawnPointException {
     	//TODO Aufgabe 4.2b
-    	Field[][] map = null;
     	
-		int singleCh;
-		FileReader fileReader = null;
-    	int i = 0;
-    	int j = 0;
-    	int totalCnt = 0;
-    	
-    	File file = new File("C:/Users/Soohyun/Desktop/Coderahmen_Eclipse/assets/levels/AI2.txt");
-    	try {
-			fileReader = new FileReader(file);
-			
-			while((singleCh = fileReader.read())!=-1){
-				System.out.print((char)singleCh);
-				//map[i][j] = new Field(new Coordinate(i, j), map[i][j].findByValue((char)singleCh));
-				
-				totalCnt++;
-				if(singleCh==10) {
-					j++;
-					i=0;
-				}
-				i++;
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace(); 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	//System.out.println(totalCnt+","+j);
-    	
-    	totalCnt-=j;
-    	i = totalCnt/(j+1);
-    	//j +=1;
-    	map = new Field[j][i];   // j = y, i = x 
-    	
-    	System.out.println(i + ", " + j);
-    	Level level = initLevel(map, file, i, content);
+    	Level level = parseLevel(mapStr);
+    	System.out.println(level.getRandomSpaceField()+ "Test");
+    	level.setName(levelName);
     	return level;
     }
     
-    
-    public static Level initLevel(Field[][] map, File file, int numOfCol,String content) {
-    	Point[] ghosts = new Point[Consts.NUM_GHOSTS];
-    	Point[] players = new Point[2];
-    	int i=0;
-    	int j=0;
-    	int playerCnt = 0;
-    	int ghostCnt = 0;
-    	FileReader fileReader;
-		try {
-			fileReader = new FileReader(file);
-			int singleCh = 0;
-			
-			while((singleCh = fileReader.read())!=-1){
-				
-				if(i==numOfCol) {
-					j++;
-					i=-1;
-				}else {
-					if((char)singleCh==MapModule.PLAYER_SPAWN.getValue()&&playerCnt<2)
-						players[playerCnt++] = new Point(j, i);
-					else if((char)singleCh==MapModule.GHOST_SPAWN.getValue()&&ghostCnt<Consts.NUM_GHOSTS)
-						ghosts[ghostCnt++] = new Point(j, i);
-					map[j][i] = new Field(new Coordinate(j, i), map[j][i].findByValue((char)singleCh));
-					
-				}
-				i++;	
-				
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    public static Level parseLevel(String mapStr) {
+    	 Field[][] map = null;
+    	 Point[] ghosts = new Point[Consts.NUM_GHOSTS];
+    	 Point[] pacmans = new Point[2];
+    	 
+    	 int ghostCnt = 0;
+    	 int pacmanCnt = 0;
+    	 
+     	 int height = 0;
+    	 int width = 0;
     	
-    	Level level = new Level(content, map, ghosts, players);
-    	System.out.println(level.getRandomSpaceField());
-    	Point point = new Point(2, 2);
-    	Point[] results = level.getBranches(ghosts[1]);
-    	return level;
+    	
+		String[] parsedMap_Str = mapStr.split("\n");
+		height = parsedMap_Str.length;
+		width = parsedMap_Str[0].length();
+		map = new Field[height][width];
+		//System.out.println(parsedMap_Str.length);  // height
+		//System.out.println(parsedMap_Str[0].length());  // width
+	
+		for (int i = 0; i < parsedMap_Str.length; i++) {
+			for (int j = 0; j < parsedMap_Str[0].length(); j++) {
+				char chr = parsedMap_Str[i].charAt(j);
+				map[i][j] = new Field(new Coordinate(i,j), map[i][j].findByValue(chr));
+				if(chr==MapModule.GHOST_SPAWN.getValue()&& ghostCnt < ghosts.length) {
+					ghosts[ghostCnt++] = new Point(j, i); 
+				}else if(chr==MapModule.PLAYER_SPAWN.getValue()&& pacmanCnt < pacmans.length) {
+					pacmans[pacmanCnt++] = new Point(j, i);
+				}
+			}
+		}
+		
+		
+		// check map. 
+		for (int i = 0; i < map.length; i++) {
+			for (int j = 0; j < map[0].length; j++) {
+				System.out.print(map[i][j]);
+			}
+			System.out.println();
+		}
+		
+		for (int i = 0; i < pacmans.length; i++) {
+			System.out.println(pacmans[i]);
+		}
+		
+		Level level = new Level(map, pacmans, ghosts);
+ //   	System.out.println("random solid check: " + level.isSolid((int)level.getRandomSpaceField().getX(), (int)level.getRandomSpaceField().getY()));
+//    	Point point = new Point(2, 2);
+//    	Point[] results = level.getBranches(ghosts[1]);
+//    	System.out.println("random: "  + results[0]);
+//    	
+		return level;
+	
     }
+    
+   
 
     /**
      * @param file Dateipfad des Levels
@@ -169,7 +167,8 @@ public class LevelParser {
     
     public static void main(String[] args) throws IllegalArgumentException, InvalidLevelCharacterException, InvalidLevelFormatException, NoPacmanSpawnPointException {
 		LevelParser l =  new LevelParser();
-		fromFile("C:/Users/Soohyun/Desktop/Coderahmen_Eclipse/assets/levels/AI2.txt");
-		
+		fromFile("C:/Users/Soohyun/Desktop/Coderahmen_Eclipse/assets/levels/Level_2.txt");
+		String levelName = l.getLevelName("C:/Users/Soohyun/Desktop/Coderahmen_Eclipse/assets/levels/Level_2.txt");
+		System.out.println(levelName);
 	} 
 }

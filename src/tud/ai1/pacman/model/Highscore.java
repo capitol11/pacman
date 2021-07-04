@@ -155,20 +155,22 @@ public class Highscore {
 		HighscoreEntry h24 = new HighscoreEntry("2021-06-03 15:58,JULI,1535");
 		HighscoreEntry h25 = new HighscoreEntry("2021-06-03 15:58,SOO_,1780");
 		HighscoreEntry h26 = new HighscoreEntry("2021-06-01 15:58,BOBO,1580");
+		HighscoreEntry h27 = new HighscoreEntry("2021-06-03 15:58,JUNE,1900");
 
 		// HighscoreEntry h23 = new HighscoreEntry("2020-02-02 12:12,name,40");
 
 		hi.addHighscore(h24);
 		hi.addHighscore(h25);
 		hi.addHighscore(h26);
+		hi.addHighscore(h27);
 
 
 		for (int i = 0; i < hi.highscoreEntries.size(); i++) {
 			System.out.println(hi.highscoreEntries.get(i));
 		}
 
-		String path_ = "C:\\Users\\Soohyun\\Desktop\\Coderahmen_Eclipse\\Coderahmen_Eclipse\\src\\tud\\ai1\\pacman\\model\\highscore.txt";
-		hi.saveToFile(path_);
+		//String path_ = "C:\\Users\\Soohyun\\Desktop\\Coderahmen_Eclipse\\Coderahmen_Eclipse\\src\\tud\\ai1\\pacman\\model\\highscore.txt";
+		//hi.saveToFile(path_);
 		
 	}
 
