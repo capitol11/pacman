@@ -193,7 +193,7 @@ public class Highscore {
 				String tmp = highscoreEntries.get(i).toString();
 				tmp = tmp.replace(',', ';');
 				bw.write(tmp);
-				bw.newLine();
+				bw.newLine(); // Alternativ: System.lineSeparator()
 				bw.flush();
 			}
 
