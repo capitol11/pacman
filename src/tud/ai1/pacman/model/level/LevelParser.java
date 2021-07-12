@@ -65,11 +65,12 @@ public class LevelParser {
 
 			filereader.close();
 		} catch (FileNotFoundException e) {
-			System.out.println(e.getCause());
+			// TODO: handle exception
 		} catch (IOException e) {
-			System.out.println(e.getCause());
+			System.out.println(e);
 		}
-		return level;
+		System.out.println(mapStr);
+    	return level;
     }
 
     /**
@@ -81,7 +82,7 @@ public class LevelParser {
      */
     public static Level fromString(String mapStr) throws IllegalArgumentException,InvalidLevelCharacterException, InvalidLevelFormatException, NoPacmanSpawnPointException {
     	//TODO Aufgabe 4.2b
-    
+    	
     	Level level = parseLevel(mapStr);
     	System.out.println(level.getRandomSpaceField()+ "Test");
     	level.setName(levelName);

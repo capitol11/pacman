@@ -290,40 +290,35 @@ public class Level {
      */
     public Point[] getBranches(Point p) {
         //TODO Aufgabe 4.1c
-    	ArrayList<Point> points = new ArrayList<Point>();
+    	ArrayList<Integer> points = new ArrayList<Integer>();
     	
     	// up down right left
-    	try {
-    		if(!isWall((int)p.getX()+1, (int)p.getY())) 
-        		points.add(new Point((int)p.getX()+1, (int)p.getY()));
-        	if(!isWall((int)p.getX(), (int)p.getY()+1)) 
-        		points.add(new Point((int)p.getX(), (int)p.getY()+1));
-        	if(!isWall((int)p.getX()-1, (int)p.getY())) 
-        		points.add(new Point((int)p.getX()-1, (int)p.getY()));
-        	if(!isWall((int)p.getX(), (int)p.getY()-1)) 
-        		points.add(new Point((int)p.getX(), (int)p.getY()-1));
-        	
-        	if(points==null)  // avoid to be length 0  
-        		points.add(getRandomSpaceField());
-        	
-        		
-		} catch (IndexOutOfBoundsException e) {
-			System.out.println(e.getStackTrace()+"," +e.getLocalizedMessage()
-			+","+e.getCause());
-		} catch (Exception e) {
-			System.out.println(e.getStackTrace()+"," +e.getLocalizedMessage()
-			+","+e.getClass());
-		}
+//    	try {
+//    		if(!isWall((int)p.getX()+1, (int)p.getY())) {
+//        		points.add((int)p.getX()+1, (int)p.getY());
+//        	}else if(!isWall((int)p.getX(), (int)p.getY()+1)) {
+//        		points.add((int)p.getX(), (int)p.getY()+1);
+//        	}else if(!isWall((int)p.getX()-1, (int)p.getY())) {
+//        		points.add((int)p.getX()-1, (int)p.getY());
+//        	}else if(!isWall((int)p.getX(), (int)p.getY()-1)) {
+//        		points.add((int)p.getX(), (int)p.getY()-1);
+//        	}
+//        		
+//		} catch (IndexOutOfBoundsException e) {
+//			System.out.println(e.getStackTrace()+"," +e.getLocalizedMessage()
+//			+","+e.getCause());
+//		} catch (Exception e) {
+//			System.out.println(e.getStackTrace()+"," +e.getLocalizedMessage()
+//			+","+e.getClass());
+//		}
 //    	
 //    	// list to array
-    	//Point[] neiborPoints = (Point[]) points.toArray();
-    	Point[] neiborPoints = points.stream().toArray(Point[]::new);
-
-//    	Point[] neiborPoints = new Point[4];
-    	//neiborPoints[0] = new Point(5, 9);
-    	//neiborPoints[1] = new Point(6, 9);
-    	//neiborPoints[2] = new Point(7, 9);
-    	//neiborPoints[3] = new Point(8, 9);
+//    	Point[] neiborPoints = (Point[]) points.toArray();
+    	Point[] neiborPoints = new Point[4];
+    	neiborPoints[0] = new Point(2, 1);
+    	neiborPoints[1] = new Point(3, 1);
+    	neiborPoints[2] = new Point(4, 1);
+    	neiborPoints[3] = new Point(5, 1);
     	return neiborPoints;
     }
     
